@@ -1,27 +1,22 @@
 @{
     ViewData["Title"] = "Nuevo pedido";
 }
-<div class="mx-auto max-w-xl">
-    <p class="mb-2 font-mono text-xs uppercase tracking-[0.25em] text-caramelo">Nueva comanda</p>
-    <h1 class="font-display text-4xl font-extrabold">Registrar pedido</h1>
-    <p class="mt-1 text-crema/60">Entra al final de la cola. El número se asigna automáticamente.</p>
+<h1 class="text-xl font-semibold">Nuevo pedido</h1>
+<p class="mt-1 text-sm text-neutral-500">El número se asigna automáticamente.</p>
 
-    <form method="post" asp-action="Registrar" class="mt-8 space-y-5 rounded-2xl border border-white/10 bg-roast p-6">
-        <div>
-            <label for="cliente" class="mb-1.5 block text-sm font-medium text-crema/80">Nombre del cliente</label>
-            <input type="text" id="cliente" name="cliente" value="@ViewBag.Cliente" maxlength="60" required autofocus
-                   placeholder="Ej. Ana López"
-                   class="w-full rounded-xl border border-white/15 bg-espresso px-4 py-3 text-crema placeholder:text-crema/30 focus:border-caramelo focus:outline-none focus:ring-2 focus:ring-caramelo/40" />
-        </div>
-        <div>
-            <label for="producto" class="mb-1.5 block text-sm font-medium text-crema/80">Producto solicitado</label>
-            <input type="text" id="producto" name="producto" value="@ViewBag.Producto" maxlength="60" required
-                   placeholder="Ej. Capuchino grande"
-                   class="w-full rounded-xl border border-white/15 bg-espresso px-4 py-3 text-crema placeholder:text-crema/30 focus:border-caramelo focus:outline-none focus:ring-2 focus:ring-caramelo/40" />
-        </div>
-        <div class="flex gap-3 pt-2">
-            <button type="submit" class="flex-1 rounded-xl bg-caramelo px-5 py-3 font-semibold text-espresso transition hover:brightness-110 active:scale-[.99]">Registrar pedido</button>
-            <a asp-action="Index" class="rounded-xl border border-white/15 px-5 py-3 font-semibold transition hover:bg-white/10">Cancelar</a>
-        </div>
-    </form>
-</div>
+<form method="post" asp-action="Registrar" class="mt-6 space-y-4">
+    <div>
+        <label for="cliente" class="mb-1 block text-sm">Cliente</label>
+        <input type="text" id="cliente" name="cliente" value="@ViewBag.Cliente" maxlength="60" required autofocus
+               class="w-full border border-neutral-300 px-3 py-2 focus:border-black focus:outline-none" />
+    </div>
+    <div>
+        <label for="producto" class="mb-1 block text-sm">Producto</label>
+        <input type="text" id="producto" name="producto" value="@ViewBag.Producto" maxlength="60" required
+               class="w-full border border-neutral-300 px-3 py-2 focus:border-black focus:outline-none" />
+    </div>
+    <div class="flex gap-3">
+        <button type="submit" class="bg-black px-4 py-2 text-sm text-white hover:bg-neutral-700">Registrar</button>
+        <a asp-action="Index" class="border border-neutral-300 px-4 py-2 text-sm hover:bg-neutral-50">Cancelar</a>
+    </div>
+</form>
