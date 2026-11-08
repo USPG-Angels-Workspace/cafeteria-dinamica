@@ -1,54 +1,82 @@
 @model List<Pedido>
 @{
-    ViewData["Title"] = "Pedidos";
+    ViewData["Title"] = "Comandas";
     int pendientes = ViewBag.Pendientes;
     Pedido? siguiente = ViewBag.Siguiente;
 }
-<div class="resumen">
-    <div class="tarjeta">
-        <div>Pedidos pendientes</div>
-        <div class="numero">@pendientes</div>
-    </div>
-    <div class="tarjeta">
-        <div>Siguiente pedido</div>
+<section class="grid gap-6 md:grid-cols-5">
+    <!-- Siguiente comanda -->
+    <div class="md:col-span-3">
+        <p class="mb-2 font-mono text-xs uppercase tracking-[0.25em] text-caramelo">Siguiente en salir</p>
         @if (siguiente == null)
         {
-            <p>No hay pedidos en espera.</p>
+            <div class="grid h-full min-h-56 place-items-center rounded-2xl border border-dashed border-white/20 p-8 text-center">
+                <div>
+                    <p class="font-display text-3xl font-extrabold">Barra libre</p>
+                    <p class="mt-1 text-crema/60">No hay pedidos en espera.</p>
+                    <a asp-action="Registrar" class="mt-4 inline-block rounded-full bg-caramelo px-5 py-2 text-sm font-semibold text-espresso hover:brightness-110">Registrar el primero</a>
+                </div>
+            </div>
         }
         else
         {
-            <div class="numero">#@siguiente.Numero</div>
-            <div>@siguiente.Cliente — @siguiente.Producto</div>
+            <article class="relative rounded-2xl bg-papel p-6 text-espresso shadow-2xl shadow-black/40 [clip-path:polygon(0_0,100%_0,100%_calc(100%-12px),97%_100%,94%_calc(100%-12px),91%_100%,88%_calc(100%-12px),85%_100%,82%_calc(100%-12px),79%_100%,76%_calc(100%-12px),73%_100%,70%_calc(100%-12px),67%_100%,64%_calc(100%-12px),61%_100%,58%_calc(100%-12px),55%_100%,52%_calc(100%-12px),49%_100%,46%_calc(100%-12px),43%_100%,40%_calc(100%-12px),37%_100%,34%_calc(100%-12px),31%_100%,28%_calc(100%-12px),25%_100%,22%_calc(100%-12px),19%_100%,16%_calc(100%-12px),13%_100%,10%_calc(100%-12px),7%_100%,4%_calc(100%-12px),1%_100%,0_calc(100%-12px))]">
+                <div class="flex items-start justify-between">
+                    <span class="font-mono text-xs uppercase tracking-widest text-espresso/50">Comanda</span>
+                    <span class="font-display text-6xl font-extrabold leading-none text-caramelo">#@siguiente.Numero</span>
+                </div>
+                <div class="mt-4 border-t border-dashed border-espresso/30 pt-4">
+                    <p class="font-mono text-xs uppercase text-espresso/50">Cliente</p>
+                    <p class="font-display text-3xl font-extrabold">@siguiente.Cliente</p>
+                    <p class="mt-3 font-mono text-xs uppercase text-espresso/50">Producto</p>
+                    <p class="text-xl font-semibold">@siguiente.Producto</p>
+                </div>
+                <form method="post" asp-action="Atender" class="mt-6 pb-3">
+                    <button type="submit" class="w-full rounded-xl bg-espresso px-5 py-3 font-semibold text-crema transition hover:bg-roast active:scale-[.99]">
+                        Atender este pedido →
+                    </button>
+                </form>
+            </article>
         }
     </div>
-</div>
 
-<div class="tarjeta" style="margin-top:1rem">
-    <h2>Cola de pedidos</h2>
-    <p>
-        <a class="btn" asp-action="Registrar">Registrar pedido</a>
-        <form class="inline" method="post" asp-action="Atender">
-            <button class="btn verde" type="submit" disabled="@(pendientes == 0)">Atender siguiente</button>
-        </form>
-    </p>
+    <!-- Contador -->
+    <div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-roast p-6 md:col-span-2">
+        <div>
+            <p class="font-mono text-xs uppercase tracking-[0.25em] text-crema/50">Pendientes</p>
+            <p class="font-display text-8xl font-extrabold leading-none @(pendientes == 0 ? "text-menta" : "text-caramelo")">@pendientes</p>
+            <p class="mt-2 text-crema/60">@(pendientes == 1 ? "pedido en espera" : "pedidos en espera")</p>
+        </div>
+        <a asp-action="Registrar" class="mt-6 rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold transition hover:bg-white/10">+ Registrar nuevo pedido</a>
+    </div>
+</section>
+
+<!-- Cola -->
+<section class="mt-10">
+    <h2 class="mb-4 font-display text-2xl font-extrabold">Cola de pedidos</h2>
     @if (Model.Count == 0)
     {
-        <p>La cola está vacía.</p>
+        <p class="rounded-xl border border-white/10 bg-roast/60 p-6 text-crema/60">La cola está vacía.</p>
     }
     else
     {
-        <table>
-            <tr><th>Orden</th><th>Pedido</th><th>Cliente</th><th>Producto</th></tr>
+        <ol class="space-y-3">
             @for (int i = 0; i < Model.Count; i++)
             {
                 var p = Model[i];
-                <tr class="@(i == 0 ? "primero" : "")">
-                    <td>@(i + 1)</td>
-                    <td>#@p.Numero</td>
-                    <td>@p.Cliente</td>
-                    <td>@p.Producto</td>
-                </tr>
+                <li class="flex items-center gap-4 rounded-xl border px-4 py-3 @(i == 0 ? "border-caramelo/60 bg-caramelo/10" : "border-white/10 bg-roast/70")">
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full font-mono text-sm font-semibold @(i == 0 ? "bg-caramelo text-espresso" : "bg-white/10 text-crema/70")">@(i + 1)</span>
+                    <span class="w-16 shrink-0 font-mono text-sm text-caramelo">#@p.Numero</span>
+                    <span class="min-w-0 flex-1">
+                        <span class="block truncate font-semibold">@p.Cliente</span>
+                        <span class="block truncate text-sm text-crema/60">@p.Producto</span>
+                    </span>
+                    @if (i == 0)
+                    {
+                        <span class="rounded-full bg-caramelo px-3 py-1 font-mono text-[11px] font-semibold uppercase text-espresso">Sigue</span>
+                    }
+                </li>
             }
-        </table>
+        </ol>
     }
-</div>
+</section>

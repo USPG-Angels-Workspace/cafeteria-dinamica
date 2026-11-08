@@ -3,43 +3,61 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"] - Cafetería dinámica</title>
-    <style>
-        body { font-family: system-ui, sans-serif; margin: 0; background: #f6f1ea; color: #2b2118; }
-        nav { background: #4a2f1b; padding: .8rem 1.5rem; display: flex; gap: 1.2rem; align-items: center; }
-        nav a { color: #fff; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
-        nav .marca { font-weight: bold; margin-right: auto; color: #fff; }
-        main { max-width: 960px; margin: 1.5rem auto; padding: 0 1rem; }
-        .tarjeta { background: #fff; border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 4px #0002; margin-bottom: 1rem; }
-        .resumen { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .resumen .tarjeta { flex: 1 1 14rem; margin-bottom: 0; }
-        .numero { font-size: 2rem; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: .5rem; border-bottom: 1px solid #ddd; text-align: left; }
-        tr.primero td { background: #fff4d6; font-weight: bold; }
-        .btn { display: inline-block; background: #a0522d; color: #fff; border: 0; border-radius: 5px; padding: .45rem .9rem; text-decoration: none; cursor: pointer; font-size: .95rem; }
-        .btn.sec { background: #6b7280; }
-        .btn.verde { background: #2e7d32; }
-        input[type=text] { padding: .4rem; width: 20rem; max-width: 100%; }
-        label { display: block; margin: .6rem 0 .2rem; }
-        .msg { padding: .6rem 1rem; border-radius: 5px; margin-bottom: 1rem; background: #e6f4ea; }
-        .msg.error { background: #fdecea; }
-        form.inline { display: inline; }
-    </style>
+    <title>@ViewData["Title"] - Barra Central</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Fraunces', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    colors: {
+                        espresso: '#1c1410',
+                        roast: '#2a1d16',
+                        crema: '#f3e9d8',
+                        papel: '#fbf6ec',
+                        caramelo: '#e0952f',
+                        menta: '#4f9d82'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <nav>
-        <span class="marca">☕ Cafetería dinámica</span>
-        <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
-        <a asp-controller="Pedidos" asp-action="Registrar">Registrar pedido</a>
-    </nav>
-    <main>
+<body class="min-h-screen bg-espresso font-sans text-crema antialiased">
+    <header class="border-b border-white/10">
+        <div class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+            <a asp-controller="Pedidos" asp-action="Index" class="flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-caramelo text-xl text-espresso">☕</span>
+                <span class="font-display text-2xl font-extrabold tracking-tight">Barra Central</span>
+            </a>
+            <nav class="flex gap-2 text-sm font-medium">
+                <a asp-controller="Pedidos" asp-action="Index" class="rounded-full px-4 py-2 text-crema/80 transition hover:bg-white/10 hover:text-crema">Comandas</a>
+                <a asp-controller="Pedidos" asp-action="Registrar" class="rounded-full bg-caramelo px-4 py-2 text-espresso transition hover:brightness-110">+ Nuevo pedido</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-5 py-8">
         @if (TempData["Mensaje"] is string mensaje)
         {
-            <div class="msg @(TempData["Error"] is true ? "error" : "")">@mensaje</div>
+            bool esError = TempData["Error"] is true;
+            <div class="mb-6 flex items-center gap-3 rounded-xl border px-4 py-3 text-sm @(esError ? "border-red-400/40 bg-red-500/10 text-red-200" : "border-menta/40 bg-menta/10 text-emerald-100")">
+                <span>@(esError ? "⚠️" : "✔")</span>
+                <span>@mensaje</span>
+            </div>
         }
         @RenderBody()
     </main>
+
+    <footer class="mx-auto max-w-5xl px-5 pb-8 font-mono text-xs text-crema/40">
+        Cola FIFO · primero en llegar, primero en atenderse
+    </footer>
 </body>
 </html>
