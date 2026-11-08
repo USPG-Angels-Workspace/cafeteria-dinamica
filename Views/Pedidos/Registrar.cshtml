@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Registrar pedido";
+}
+<div class="tarjeta">
+    <h2>Registrar pedido</h2>
+    <form method="post" asp-action="Registrar">
+        <label for="cliente">Nombre del cliente</label>
+        <input type="text" id="cliente" name="cliente" value="@ViewBag.Cliente" maxlength="60" required />
+        <label for="producto">Producto solicitado</label>
+        <input type="text" id="producto" name="producto" value="@ViewBag.Producto" maxlength="60" required />
+        <p>
+            <button class="btn" type="submit">Registrar</button>
+            <a class="btn sec" asp-action="Index">Cancelar</a>
+        </p>
+    </form>
+    <p>El número de pedido se asigna automáticamente.</p>
+</div>

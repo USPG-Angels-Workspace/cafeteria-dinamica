@@ -1,0 +1,54 @@
+@model List<Pedido>
+@{
+    ViewData["Title"] = "Pedidos";
+    int pendientes = ViewBag.Pendientes;
+    Pedido? siguiente = ViewBag.Siguiente;
+}
+<div class="resumen">
+    <div class="tarjeta">
+        <div>Pedidos pendientes</div>
+        <div class="numero">@pendientes</div>
+    </div>
+    <div class="tarjeta">
+        <div>Siguiente pedido</div>
+        @if (siguiente == null)
+        {
+            <p>No hay pedidos en espera.</p>
+        }
+        else
+        {
+            <div class="numero">#@siguiente.Numero</div>
+            <div>@siguiente.Cliente — @siguiente.Producto</div>
+        }
+    </div>
+</div>
+
+<div class="tarjeta" style="margin-top:1rem">
+    <h2>Cola de pedidos</h2>
+    <p>
+        <a class="btn" asp-action="Registrar">Registrar pedido</a>
+        <form class="inline" method="post" asp-action="Atender">
+            <button class="btn verde" type="submit" disabled="@(pendientes == 0)">Atender siguiente</button>
+        </form>
+    </p>
+    @if (Model.Count == 0)
+    {
+        <p>La cola está vacía.</p>
+    }
+    else
+    {
+        <table>
+            <tr><th>Orden</th><th>Pedido</th><th>Cliente</th><th>Producto</th></tr>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var p = Model[i];
+                <tr class="@(i == 0 ? "primero" : "")">
+                    <td>@(i + 1)</td>
+                    <td>#@p.Numero</td>
+                    <td>@p.Cliente</td>
+                    <td>@p.Producto</td>
+                </tr>
+            }
+        </table>
+    }
+</div>

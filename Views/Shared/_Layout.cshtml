@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Cafetería dinámica</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; background: #f6f1ea; color: #2b2118; }
+        nav { background: #4a2f1b; padding: .8rem 1.5rem; display: flex; gap: 1.2rem; align-items: center; }
+        nav a { color: #fff; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        nav .marca { font-weight: bold; margin-right: auto; color: #fff; }
+        main { max-width: 960px; margin: 1.5rem auto; padding: 0 1rem; }
+        .tarjeta { background: #fff; border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 4px #0002; margin-bottom: 1rem; }
+        .resumen { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .resumen .tarjeta { flex: 1 1 14rem; margin-bottom: 0; }
+        .numero { font-size: 2rem; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: .5rem; border-bottom: 1px solid #ddd; text-align: left; }
+        tr.primero td { background: #fff4d6; font-weight: bold; }
+        .btn { display: inline-block; background: #a0522d; color: #fff; border: 0; border-radius: 5px; padding: .45rem .9rem; text-decoration: none; cursor: pointer; font-size: .95rem; }
+        .btn.sec { background: #6b7280; }
+        .btn.verde { background: #2e7d32; }
+        input[type=text] { padding: .4rem; width: 20rem; max-width: 100%; }
+        label { display: block; margin: .6rem 0 .2rem; }
+        .msg { padding: .6rem 1rem; border-radius: 5px; margin-bottom: 1rem; background: #e6f4ea; }
+        .msg.error { background: #fdecea; }
+        form.inline { display: inline; }
+    </style>
+</head>
+<body>
+    <nav>
+        <span class="marca">☕ Cafetería dinámica</span>
+        <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+        <a asp-controller="Pedidos" asp-action="Registrar">Registrar pedido</a>
+    </nav>
+    <main>
+        @if (TempData["Mensaje"] is string mensaje)
+        {
+            <div class="msg @(TempData["Error"] is true ? "error" : "")">@mensaje</div>
+        }
+        @RenderBody()
+    </main>
+</body>
+</html>
